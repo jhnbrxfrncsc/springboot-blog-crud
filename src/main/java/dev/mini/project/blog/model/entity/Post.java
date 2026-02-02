@@ -1,6 +1,5 @@
-package dev.mini.project.blog.entity;
+package dev.mini.project.blog.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,13 +33,13 @@ public class Post {
     @Column(nullable = false)
     private boolean published;
 
-    @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private Instant createdAt = Instant.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
-    @Column(nullable = false)
     @UpdateTimestamp
-    private Instant updatedAt = Instant.now();
+    @Column(name= "updated_at")
+    private Instant updatedAt;
 
     @Version
     @Column(nullable = false)

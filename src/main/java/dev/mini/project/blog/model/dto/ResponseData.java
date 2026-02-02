@@ -1,4 +1,4 @@
-package dev.mini.project.blog.dto;
+package dev.mini.project.blog.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

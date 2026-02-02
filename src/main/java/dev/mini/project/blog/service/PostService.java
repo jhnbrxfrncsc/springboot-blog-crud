@@ -1,10 +1,15 @@
 package dev.mini.project.blog.service;
 
-import dev.mini.project.blog.dto.*;
-import dev.mini.project.blog.entity.Post;
-import dev.mini.project.blog.entity.User;
+import dev.mini.project.blog.common.UpdateHelper;
+import dev.mini.project.blog.model.dto.PageResponse;
+import dev.mini.project.blog.model.dto.PostCreateRequest;
+import dev.mini.project.blog.model.dto.PostData;
+import dev.mini.project.blog.model.dto.PostUpdateRequest;
+import dev.mini.project.blog.model.entity.Post;
+import dev.mini.project.blog.model.entity.User;
 import dev.mini.project.blog.mapper.PostMapper;
 import dev.mini.project.blog.repository.PostRepository;
+import dev.mini.project.blog.common.SortUtil;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -42,7 +47,7 @@ public class PostService {
      */
     @Transactional(readOnly = true)
     public PageResponse<PostData> getAllPosts(int page, int size, String sortDirection) throws IllegalArgumentException {
-        Sort sort = parseSortDirection(sortDirection);
+        Sort sort = SortUtil.parseSortDirection(sortDirection, "title");
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<PostData> postData = postRepository.findAll(pageable)
                 .map(postMapper::convertToPostDTO);
@@ -64,7 +69,7 @@ public class PostService {
      */
     @Transactional(readOnly = true)
     public PageResponse<PostData> searchPosts(String query, int page, int size, String sortDirection) throws IllegalArgumentException {
-        Sort sort = parseSortDirection(sortDirection);
+        Sort sort = SortUtil.parseSortDirection(sortDirection, "title");
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<PostData> posts = postRepository
                 .findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(query, query, pageable)
@@ -126,8 +131,8 @@ public class PostService {
         boolean updated = false;
 
         // perform validation before updating the existing post record fields.
-        updated |= updateIfChanged(existingPost.getTitle(), updateRequest.getTitle(), existingPost::setTitle);
-        updated |= updateIfChanged(existingPost.getContent(), updateRequest.getContent(), existingPost::setContent);
+        updated |= UpdateHelper.updateIfChanged(existingPost.getTitle(), updateRequest.getTitle(), existingPost::setTitle);
+        updated |= UpdateHelper.updateIfChanged(existingPost.getContent(), updateRequest.getContent(), existingPost::setContent);
 
         if (existingPost.isPublished() != updateRequest.isPublished()) {
             existingPost.setPublished(updateRequest.isPublished());
@@ -168,6 +173,7 @@ public class PostService {
      * @return {@link Post}
      * @see Post
      */
+    @Transactional(readOnly = true)
     public Post getSinglePost(Integer id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> {
@@ -175,40 +181,6 @@ public class PostService {
                     logger.error("PostService#getSinglePost -- {}",message);
                     return new ValidationException(message);
                 });
-    }
-
-    /**
-     * parse sort direction
-     *
-     * @param sortDirection sortDirection
-     * @return {@link Sort}
-     * @see Sort
-     */
-    private Sort parseSortDirection(String sortDirection) {
-        return switch (sortDirection.toLowerCase()) {
-            case "asc", "ascending" -> Sort.by("id").ascending();
-            case "desc", "descending" -> Sort.by("id").descending();
-            default -> {
-                    logger.error("Invalid sortDirection {}", sortDirection);
-                    throw new IllegalArgumentException("Invalid sortDirection: " + sortDirection);
-            }
-        };
-    }
-
-    /**
-     * update if changed
-     *
-     * @param currentValue currentValue
-     * @param newValue newValue
-     * @param setter setter
-     * @return {@link boolean}
-     */
-    private boolean updateIfChanged(String currentValue, String newValue, Consumer<String> setter) {
-        if (newValue != null && !newValue.equals(currentValue)) {
-            setter.accept(newValue);
-            return true;
-        }
-        return false;
     }
 
 }

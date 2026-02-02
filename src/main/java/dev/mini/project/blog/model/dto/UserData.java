@@ -1,6 +1,5 @@
-package dev.mini.project.blog.dto;
+package dev.mini.project.blog.model.dto;
 
-import dev.mini.project.blog.entity.Post;
 import lombok.Data;
 
 import java.time.Instant;

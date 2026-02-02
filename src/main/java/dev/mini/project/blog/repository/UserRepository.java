@@ -1,7 +1,6 @@
 package dev.mini.project.blog.repository;
 
-import dev.mini.project.blog.dto.UserData;
-import dev.mini.project.blog.entity.User;
+import dev.mini.project.blog.model.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

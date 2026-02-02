@@ -1,10 +1,10 @@
 package dev.mini.project.blog.mapper;
 
-import dev.mini.project.blog.dto.UserCreateRequest;
-import dev.mini.project.blog.dto.UserData;
-import dev.mini.project.blog.entity.User;
-import dev.mini.project.blog.repository.UserRepository;
+import dev.mini.project.blog.model.dto.UserRegisterRequest;
+import dev.mini.project.blog.model.dto.UserData;
+import dev.mini.project.blog.model.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     private final PostMapper postMapper;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Convert to User DTO
@@ -34,15 +35,15 @@ public class UserMapper {
     /**
      * convert to user entity
      *
-     * @param userCreateRequest userData
+     * @param userRegisterRequest userData
      * @return {@link User}
      * @see User
      */
-    public User convertToUserEntity(UserCreateRequest userCreateRequest) {
+    public User convertToUserEntity(UserRegisterRequest userRegisterRequest) {
         return User.builder()
-                .username(userCreateRequest.getUsername())
-                .email(userCreateRequest.getEmail())
-                .password(userCreateRequest.getPassword())
+                .username(userRegisterRequest.getUsername())
+                .email(userRegisterRequest.getEmail())
+                .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
                 .build();
     }
 }

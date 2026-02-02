@@ -1,4 +1,4 @@
-package dev.mini.project.blog.dto;
+package dev.mini.project.blog.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

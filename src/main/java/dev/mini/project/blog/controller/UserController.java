@@ -1,6 +1,6 @@
 package dev.mini.project.blog.controller;
 
-import dev.mini.project.blog.dto.*;
+import dev.mini.project.blog.model.dto.*;
 import dev.mini.project.blog.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,14 +53,14 @@ public class UserController {
     public ResponseData<UserData> getUser(@PathVariable Integer id) {
         try {
             UserData user = userService.getUserById(id);
-            return  new ResponseData<UserData>("User retrieved successfully", HttpStatus.OK, user);
+            return  new ResponseData<>("User retrieved successfully", HttpStatus.OK, user);
         } catch (ValidationException ve) {
-            return new ResponseData<UserData>(ve.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+            return new ResponseData<>(ve.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
     @PostMapping("")
-    public ResponseData<UserData> createUser(@Valid @RequestBody UserCreateRequest request, BindingResult bindingResult) {
+    public ResponseData<UserData> createUser(@Valid @RequestBody UserRegisterRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = bindingResult.getFieldErrors()
                     .stream()

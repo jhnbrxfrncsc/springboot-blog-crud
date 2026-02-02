@@ -1,4 +1,4 @@
-package dev.mini.project.blog.dto;
+package dev.mini.project.blog.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package dev.mini.project.blog.mapper;
 
-import dev.mini.project.blog.dto.PostCreateRequest;
-import dev.mini.project.blog.dto.PostData;
-import dev.mini.project.blog.entity.Post;
-import dev.mini.project.blog.entity.User;
+import dev.mini.project.blog.model.dto.PostCreateRequest;
+import dev.mini.project.blog.model.dto.PostData;
+import dev.mini.project.blog.model.entity.Post;
+import dev.mini.project.blog.model.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

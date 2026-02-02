@@ -1,21 +1,16 @@
 package dev.mini.project.blog.controller;
 
-import dev.mini.project.blog.dto.*;
+import dev.mini.project.blog.model.dto.*;
 import dev.mini.project.blog.service.PostService;
-import jakarta.persistence.PostUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.SortDirection;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController

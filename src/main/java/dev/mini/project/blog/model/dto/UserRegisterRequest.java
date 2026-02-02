@@ -1,13 +1,12 @@
-package dev.mini.project.blog.dto;
+package dev.mini.project.blog.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class UserCreateRequest {
+public class UserRegisterRequest {
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")

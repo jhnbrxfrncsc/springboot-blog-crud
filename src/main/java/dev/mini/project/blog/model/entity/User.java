@@ -1,6 +1,5 @@
-package dev.mini.project.blog.entity;
+package dev.mini.project.blog.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,6 +46,9 @@ public class User {
 
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
+
+    @Column(nullable = false)
+    private boolean passwordMigrated;
 
     @PrePersist
     public void prePersist(){
