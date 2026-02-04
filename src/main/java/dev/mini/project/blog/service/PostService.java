@@ -12,6 +12,7 @@ import dev.mini.project.blog.repository.PostRepository;
 import dev.mini.project.blog.common.SortUtil;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -30,9 +31,8 @@ import java.util.function.Consumer;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
-
-    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 
     private final PostRepository postRepository;
     private final UserService userService;
@@ -101,16 +101,16 @@ public class PostService {
      */
     @Transactional
     public PostData createPost(PostCreateRequest postCreateRequest) throws ValidationException {
-        logger.info("PostService#createPost() -- START");
+        log.info("PostService#createPost() -- START");
         // Check if passed author ID is existing.
         User author = userService.getUserEntityById(postCreateRequest.getAuthorId());
         Post newPost = postMapper.convertToPostEntity(postCreateRequest, author);
 
         // persist
         Post savedPost = postRepository.save(newPost);
-        logger.info("PostService#createPost() -- successfully saved the post: {}", savedPost.getTitle());
+        log.info("PostService#createPost() -- successfully saved the post: {}", savedPost.getTitle());
 
-        logger.info("PostService#createPost() -- END");
+        log.info("PostService#createPost() -- END");
         return postMapper.convertToPostDTO(savedPost);
     }
 
@@ -125,7 +125,7 @@ public class PostService {
      */
     @Transactional
     public PostData updatePost(Integer postId, PostUpdateRequest updateRequest) throws ValidationException {
-        logger.info("PostService#updatePost() -- START");
+        log.info("PostService#updatePost() -- START");
         // fetch entity record
         Post existingPost = getSinglePost(postId);
         boolean updated = false;
@@ -141,12 +141,12 @@ public class PostService {
 
         // if values weren't updated, return the unchanged post record.
         if (!updated) {
-            logger.info("PostService#updatePost() -- No changes for post {} -- END", postId);
+            log.info("PostService#updatePost() -- No changes for post {} -- END", postId);
             return postMapper.convertToPostDTO(existingPost);
         }
 
         // convert to DTO
-        logger.info("PostService#updatePost() -- END");
+        log.info("PostService#updatePost() -- END");
         return postMapper.convertToPostDTO(existingPost);
     }
 
@@ -158,12 +158,12 @@ public class PostService {
      */
     @Transactional
     public void deletePost(Integer userId) throws ValidationException {
-        logger.info("PostService#deletePost() -- START");
+        log.info("PostService#deletePost() -- START");
         Post post = getSinglePost(userId);
 
         postRepository.delete(post);
-        logger.info("PostService#deletePost() -- successfully deleted the post: {}", post.getTitle());
-        logger.info("PostService#deletePost() -- END");
+        log.info("PostService#deletePost() -- successfully deleted the post: {}", post.getTitle());
+        log.info("PostService#deletePost() -- END");
     }
 
     /**
@@ -178,7 +178,7 @@ public class PostService {
         return postRepository.findById(id)
                 .orElseThrow(() -> {
                     String message = "Post with id " + id + " not found";
-                    logger.error("PostService#getSinglePost -- {}",message);
+                    log.error("PostService#getSinglePost -- {}",message);
                     return new ValidationException(message);
                 });
     }

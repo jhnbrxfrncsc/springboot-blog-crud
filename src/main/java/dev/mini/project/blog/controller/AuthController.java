@@ -24,10 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserRepository userRepository;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
 
     @PostMapping("/register")
